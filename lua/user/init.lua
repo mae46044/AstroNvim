@@ -1,7 +1,8 @@
 local config = {
 
   -- Set colorscheme
-  colorscheme = "default_theme",
+  -- colorscheme = "default_theme",
+  colorscheme = "sonokai",
 
   -- set vim options here (vim.<first_key>.<second_key> =  value)
   options = {
@@ -51,6 +52,7 @@ local config = {
       --     require("lsp_signature").setup()
       --   end,
       -- },
+         { "sainnhe/sonokai" },
     },
     -- All other entries override the setup() call for default plugins
     treesitter = {
