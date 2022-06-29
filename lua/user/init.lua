@@ -168,6 +168,7 @@ local config = {
         formatting.rufo,
         -- Set a linter
         diagnostics.rubocop,
+        diagnostics.eslint,
       },
       -- NOTE: You can remove this on attach function to disable format on save
       on_attach = function(client)
