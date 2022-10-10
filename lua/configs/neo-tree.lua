@@ -1,79 +1,54 @@
-local M = {}
-
-function M.setup()
-  require("core.utils").vim_opts { g = { neo_tree_remove_legacy_commands = true } }
-end
-
-function M.config()
-  local status_ok, neotree = pcall(require, "neo-tree")
-  if status_ok then
-    neotree.setup(require("core.utils").user_plugin_opts("plugins.neo-tree", {
-      popup_border_style = "rounded",
-      enable_diagnostics = false,
-      default_component_configs = {
-        indent = {
-          padding = 0,
-          with_expanders = false,
-        },
-        icon = {
-          folder_closed = "📁",
-          folder_open = "📂",
-          folder_empty = "",
-          default = "",
-        },
-        git_status = {
-          symbols = {
-            added = "",
-            deleted = "",
-            modified = "",
-            renamed = "➜",
-            untracked = "★",
-            ignored = "◌",
-            unstaged = "✗",
-            staged = "✓",
-            conflict = "",
-          },
-        },
+local status_ok, neotree = pcall(require, "neo-tree")
+if not status_ok then return end
+neotree.setup(astronvim.user_plugin_opts("plugins.neo-tree", {
+  close_if_last_window = true,
+  enable_diagnostics = false,
+  source_selector = {
+    winbar = true,
+    content_layout = "center",
+    tab_labels = {
+      filesystem = astronvim.get_icon "FolderClosed" .. " File",
+      buffers = astronvim.get_icon "DefaultFile" .. " Bufs",
+      git_status = astronvim.get_icon "Git" .. " Git",
+      diagnostics = astronvim.get_icon "Diagnostic" .. " Diagnostic",
+    },
+  },
+  default_component_configs = {
+    indent = {
+      padding = 0,
+    },
+    icon = {
+      folder_closed = astronvim.get_icon "FolderClosed",
+      folder_open = astronvim.get_icon "FolderOpen",
+      folder_empty = astronvim.get_icon "FolderEmpty",
+      default = astronvim.get_icon "DefaultFile",
+    },
+    git_status = {
+      symbols = {
+        added = astronvim.get_icon "GitAdd",
+        deleted = astronvim.get_icon "GitDelete",
+        modified = astronvim.get_icon "GitChange",
+        renamed = astronvim.get_icon "GitRenamed",
+        untracked = astronvim.get_icon "GitUntracked",
+        ignored = astronvim.get_icon "GitIgnored",
+        unstaged = astronvim.get_icon "GitUnstaged",
+        staged = astronvim.get_icon "GitStaged",
+        conflict = astronvim.get_icon "GitConflict",
       },
-      window = {
-        width = 25,
-        mappings = {
-          ["o"] = "open",
-        },
-      },
-      filesystem = {
-        filtered_items = {
-          visible = false,
-          hide_dotfiles = true,
-          hide_gitignored = false,
-          hide_by_name = {
-            ".DS_Store",
-            "thumbs.db",
-            "node_modules",
-            "__pycache__",
-          },
-        },
-        follow_current_file = true,
-        hijack_netrw_behavior = "open_current",
-        use_libuv_file_watcher = true,
-      },
-      git_status = {
-        window = {
-          position = "float",
-        },
-      },
-      event_handlers = {
-        {
-          event = "vim_buffer_enter",
-          handler = function(_)
-            if vim.bo.filetype == "neo-tree" then
-              vim.wo.signcolumn = "auto"
-            end
-          end,
-        },
-      },
-    }))
-  end
-end
-
-return M
+    },
+  },
+  window = {
+    width = 30,
+    mappings = {
+      ["o"] = "open",
+    },
+  },
+  filesystem = {
+    follow_current_file = true,
+    hijack_netrw_behavior = "open_current",
+    use_libuv_file_watcher = true,
+  },
+  event_handlers = {
+    { event = "neo_tree_buffer_enter", handler = function(_) vim.opt_local.signcolumn = "auto" end },
+  },
+}))

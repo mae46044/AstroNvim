@@ -1,2 +1,7 @@
+colors/*
+!colors/default_theme.lua
 plugin
 lua/packer_compiled.lua
+ginit.vim
+docs
+lua/user
